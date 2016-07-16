@@ -13,10 +13,17 @@ class BlogPostsController extends Controller
     /**
      * @Route("/", name="list")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $blogPosts = $em->getRepository('AppBundle:BlogPost')->findAll();
+        $query = $em->getRepository('AppBundle:BlogPost')->createQueryBuilder('bp')->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        $blogPosts = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return $this->render('BlogPosts/list.html.twig', [
             'blog_posts' => $blogPosts,
@@ -26,6 +33,7 @@ class BlogPostsController extends Controller
     /**
      * @param Request $request
      * @Route("/create", name="create")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function createAction(Request $request)
     {
