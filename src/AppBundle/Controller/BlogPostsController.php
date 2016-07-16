@@ -16,13 +16,20 @@ class BlogPostsController extends Controller
     public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $query = $em->getRepository('AppBundle:BlogPost')->createQueryBuilder('bp')->getQuery();
+        $queryBuilder = $em->getRepository('AppBundle:BlogPost')->createQueryBuilder('bp');
+
+        if ($request->query->getAlnum('filter')) {
+            $queryBuilder->where('bp.title LIKE :title')
+                ->setParameter('title', '%' . $request->query->getAlnum('filter') . '%');
+        }
+
+        $query = $queryBuilder->getQuery();
 
         $paginator  = $this->get('knp_paginator');
         $blogPosts = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
-            10/*limit per page*/
+            $request->query->getInt('limit', 10)/*limit per page*/
         );
 
         return $this->render('BlogPosts/list.html.twig', [
