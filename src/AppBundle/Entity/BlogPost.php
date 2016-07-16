@@ -27,26 +27,8 @@ class BlogPost implements \JsonSerializable
      */
     protected $body;
 
-    /**
-     * @ORM\Column(name="decimal_1", type="decimal", scale=2, precision=8)
-     */
-    protected $decimal1;
-
-    /**
-     * @ORM\Column(name="decimal_2", type="decimal", scale=3, precision=8)
-     */
-    protected $decimal2;
-
-    /**
-     * @ORM\Column(name="decimal_3", type="decimal",  precision=10, scale=4)
-     */
-    protected $decimal3;
-
-
     public function getId()
     {
-        // this has the word private in it
-        // and a semi colon ; for some reason
         return $this->id;
     }
 
