@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -26,6 +27,15 @@ class BlogPost implements \JsonSerializable
      * @ORM\Column(type="string", name="body")
      */
     protected $body;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accurate_at", type="datetime")
+     * @Assert\DateTime()
+     * @Assert\LessThanOrEqual("now")
+     */
+    protected $accurateAt;
 
     public function getId()
     {
@@ -66,6 +76,25 @@ class BlogPost implements \JsonSerializable
     public function setBody($body)
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAccurateAt()
+    {
+        return $this->accurateAt;
+    }
+
+    /**
+     * @param \DateTime $accurateAt
+     * @return BlogPost
+     */
+    public function setAccurateAt(\DateTime $accurateAt)
+    {
+        $this->accurateAt = $accurateAt;
 
         return $this;
     }

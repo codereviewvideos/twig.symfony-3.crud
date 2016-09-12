@@ -2,7 +2,10 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Form\DataTransformer\TimestampToDateTimeTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +22,13 @@ class BlogPostType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('body', TextType::class)
+            ->add('accurateAt', NumberType::class)
             ->add('submit', SubmitType::class)
+        ;
+
+        $builder
+            ->get('accurateAt')
+            ->addModelTransformer(new TimestampToDateTimeTransformer())
         ;
     }
 
